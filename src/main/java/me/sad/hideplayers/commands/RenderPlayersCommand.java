@@ -41,14 +41,13 @@ public class RenderPlayersCommand extends CommandBase {
             if (args[0].equalsIgnoreCase("remove")) {
                 return getListOfStringsMatchingLastWord(args, HidePlayers.players);
             } else if (args[0].equalsIgnoreCase("add")) {
-                //TODO: Find better way of doing this.
                 NetHandlerPlayClient connection = Minecraft.getMinecraft().getNetHandler();
                 List<NetworkPlayerInfo> playerInfo = new ArrayList(connection.getPlayerInfoMap());
                 List<String> playerList = Lists.<String>newArrayList();
                 for (int i = 0; i < playerInfo.size(); ++i) {
-                    if (i < playerInfo.size()) {
+                    if(playerInfo.get(i).getResponseTime() > 0 && playerInfo.get(i).getGameProfile().getName().matches("^[a-zA-Z0-9_]*$"))
                         playerList.add(playerInfo.get(i).getGameProfile().getName());
-                    } }
+                }
                 return getListOfStringsMatchingLastWord(args, playerList);
             }
         }
