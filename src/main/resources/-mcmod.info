@@ -1,0 +1,16 @@
+[
+{
+  "modid": "HidePlayers",
+  "name": "Hide Players",
+  "description": "A Forge mod made for only rendering certain players in Hypixel Housing.\n§b/hideplayers help for help.",
+  "version": "1.0",
+  "mcversion": "1.8.9",
+  "url": "\u00a7bhttps://https://github.com/codesad/HidePlayers",
+  "updateUrl": "",
+  "authorList": "s_a_d",
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
