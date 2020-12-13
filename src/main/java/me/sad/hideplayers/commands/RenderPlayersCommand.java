@@ -40,7 +40,7 @@ public class RenderPlayersCommand extends CommandBase {
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("remove")) {
                 return getListOfStringsMatchingLastWord(args, HidePlayers.players);
-            } else if (args[0].equals("add")) {
+            } else if (args[0].equalsIgnoreCase("add")) {
                 //TODO: Find better way of doing this.
                 NetHandlerPlayClient connection = Minecraft.getMinecraft().getNetHandler();
                 List<NetworkPlayerInfo> playerInfo = new ArrayList(connection.getPlayerInfoMap());
