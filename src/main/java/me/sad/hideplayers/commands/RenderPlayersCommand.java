@@ -1,14 +1,22 @@
 package me.sad.hideplayers.commands;
 
+import com.google.common.collect.Lists;
 import me.sad.hideplayers.HidePlayers;
 import me.sad.hideplayers.utils.ConfigUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class RenderPlayersCommand extends CommandBase {
-
     private void toggleRenderer(ICommandSender sender) {
         HidePlayers.toggled = !HidePlayers.toggled;
         if (HidePlayers.toggled) sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "Toggled rendering players \u00a7aON\u00a7r!"));
@@ -23,6 +31,29 @@ public class RenderPlayersCommand extends CommandBase {
     @Override public int getRequiredPermissionLevel() { return 0; }
     @Override public String getCommandName() { return "hideplayers"; }
     @Override public String getCommandUsage(ICommandSender sender) { return "/hideplayers (toggle/help/list/add/remove) [player]"; }
+    @Override public List<String> getCommandAliases() { return Collections.singletonList("hp"); }
+
+    @Override
+    public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+        if (args.length == 1) {
+            return getListOfStringsMatchingLastWord(args, "toggle", "help", "list", "add", "remove");
+        } else if (args.length == 2) {
+            if (args[0].equalsIgnoreCase("remove")) {
+                return getListOfStringsMatchingLastWord(args, HidePlayers.players);
+            } else if (args[0].equals("add")) {
+                //TODO: Find better way of doing this.
+                NetHandlerPlayClient connection = Minecraft.getMinecraft().getNetHandler();
+                List<NetworkPlayerInfo> playerInfo = new ArrayList(connection.getPlayerInfoMap());
+                List<String> playerList = Lists.<String>newArrayList();
+                for (int i = 0; i < playerInfo.size(); ++i) {
+                    if (i < playerInfo.size()) {
+                        playerList.add(playerInfo.get(i).getGameProfile().getName());
+                    } }
+                return getListOfStringsMatchingLastWord(args, playerList);
+            }
+        }
+        return null;
+    }
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
