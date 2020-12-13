@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonWriter;
 import me.sad.hideplayers.HidePlayers;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -23,6 +24,7 @@ public class ConfigUtils {
             writeConfig();
         }
     }
+
     public static void writeConfig() throws IOException {
         JsonWriter writer = new JsonWriter(new FileWriter("config/hideplayers.json"));
         writer.beginObject();

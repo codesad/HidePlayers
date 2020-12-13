@@ -19,8 +19,11 @@ import java.util.List;
 public class RenderPlayersCommand extends CommandBase {
     private void toggleRenderer(ICommandSender sender) {
         HidePlayers.toggled = !HidePlayers.toggled;
-        if (HidePlayers.toggled) sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "Toggled rendering players \u00a7aON\u00a7r!"));
-        else sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "Toggled rendering players \u00a7cOFF\u00a7r!"));
+        if (HidePlayers.toggled) {
+            sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "Toggled rendering players \u00a7aON\u00a7r!"));
+        } else {
+            sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + "Toggled rendering players \u00a7cOFF\u00a7r!"));
+        }
         try {
             ConfigUtils.writeConfig();
         } catch (IOException e) {
@@ -28,10 +31,25 @@ public class RenderPlayersCommand extends CommandBase {
         }
     }
 
-    @Override public int getRequiredPermissionLevel() { return 0; }
-    @Override public String getCommandName() { return "hideplayers"; }
-    @Override public String getCommandUsage(ICommandSender sender) { return "/hideplayers (toggle/help/list/add/remove) [player]"; }
-    @Override public List<String> getCommandAliases() { return Collections.singletonList("hp"); }
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 0;
+    }
+
+    @Override
+    public String getCommandName() {
+        return "hideplayers";
+    }
+
+    @Override
+    public String getCommandUsage(ICommandSender sender) {
+        return "/hideplayers (toggle/help/list/add/remove) [player]";
+    }
+
+    @Override
+    public List<String> getCommandAliases() {
+        return Collections.singletonList("hp");
+    }
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
@@ -43,10 +61,10 @@ public class RenderPlayersCommand extends CommandBase {
             } else if (args[0].equalsIgnoreCase("add")) {
                 NetHandlerPlayClient connection = Minecraft.getMinecraft().getNetHandler();
                 List<NetworkPlayerInfo> playerInfo = new ArrayList(connection.getPlayerInfoMap());
-                List<String> playerList = Lists.<String>newArrayList();
-                for (int i = 0; i < playerInfo.size(); ++i) {
-                    if(playerInfo.get(i).getResponseTime() > 0 && playerInfo.get(i).getGameProfile().getName().matches("^[a-zA-Z0-9_]*$"))
-                        playerList.add(playerInfo.get(i).getGameProfile().getName());
+                List<String> playerList = Lists.newArrayList();
+                for (NetworkPlayerInfo networkPlayerInfo : playerInfo) {
+                    if (networkPlayerInfo.getResponseTime() > 0 && networkPlayerInfo.getGameProfile().getName().matches("^[a-zA-Z0-9_]*$"))
+                        playerList.add(networkPlayerInfo.getGameProfile().getName());
                 }
                 return getListOfStringsMatchingLastWord(args, playerList);
             }
@@ -66,7 +84,7 @@ public class RenderPlayersCommand extends CommandBase {
                     sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + getCommandUsage(sender)));
                     break;
                 case "list":
-                    sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + HidePlayers.players.toString().substring(1,HidePlayers.players.toString().length()-1)));
+                    sender.addChatMessage(new ChatComponentText(HidePlayers.prefix + HidePlayers.players.toString().substring(1, HidePlayers.players.toString().length() - 1)));
                     break;
                 case "add":
                     if (args.length == 1) {

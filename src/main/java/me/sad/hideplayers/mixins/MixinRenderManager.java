@@ -13,14 +13,17 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(RenderManager.class)
 public abstract class MixinRenderManager {
-    @Shadow public abstract <T extends Entity> Render<T> getEntityRenderObject(Entity entityIn);
+    @Shadow
+    public abstract <T extends Entity> Render<T> getEntityRenderObject(Entity entityIn);
+
     @Overwrite
     public boolean shouldRender(Entity entityIn, ICamera camera, double camX, double camY, double camZ) {
         if (entityIn instanceof EntityOtherPlayerMP) {
-            if (!HidePlayers.players.contains(entityIn.getName().toLowerCase()) && !HidePlayers.toggled)
+            if (!HidePlayers.players.contains(entityIn.getName().toLowerCase()) && !HidePlayers.toggled) {
                 return false;
+            }
         }
-        Render<Entity> render = this.<Entity>getEntityRenderObject(entityIn);
+        Render<Entity> render = this.getEntityRenderObject(entityIn);
         return render != null && render.shouldRender(entityIn, camera, camX, camY, camZ);
     }
 }
