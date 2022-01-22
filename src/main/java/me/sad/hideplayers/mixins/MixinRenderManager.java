@@ -15,7 +15,7 @@ public abstract class MixinRenderManager {
     @Inject(at=@At("HEAD"), method = "shouldRender", cancellable = true)
     public void shouldRender(Entity entityIn, ICamera camera, double camX, double camY, double camZ, CallbackInfoReturnable<Boolean> cir) {
         if (entityIn instanceof EntityOtherPlayerMP) {
-            if (!HidePlayers.players.contains(entityIn.getName().toLowerCase()) && !HidePlayers.toggled) {
+            if (!HidePlayers.players.contains(entityIn.getName().toLowerCase()) && entityIn.getUniqueID().version() != 2 && !HidePlayers.toggled) { // hypixel's NPCs have UUIDv2
                 cir.setReturnValue(false);
             }
         }
